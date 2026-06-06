@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  node-app:
+    build: ./nodejs
+    container_name: node_asl_script
+
+  python-app:
+    build: ./python
+    container_name: python_asl_script
+
+  php-app:
+    build: ./php
+    container_name: php_asl_script
+
+  ruby-app:
+    build: ./ruby
+    container_name: ruby_asl_script
+
+  lua-app:
+    build: ./lua
+    container_name: lua_asl_script
+
+  rust-app:
+    build: ./rust
+    container_name: rust_asl_script
+
+  java-app:
+    build: ./java
+    container_name: java_asl_script
+
+  go-app:
+    build: ./golang
+    container_name: go_asl_script
+
+  cpp-app:
+    build: ./c++
+    container_name: cpp_asl_script
