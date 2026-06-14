@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  express-api:
+    build: .
+    container_name: wdv442-api
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
