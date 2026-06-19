@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "nodemon -e twig,json,js index.js"
+    "start": "node index.js",
+    "watch": "nodemon -e twig,json,js index.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:seed": "sequelize-cli db:seed:all",
+    "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "test": "node --check index.js && node --check controllers/space-object.js && node --check routers/space-object.js && node --check src/models/spaceobject.js"
   },
   "keywords": [],
   "author": "",
