@@ -1,32 +1,71 @@
-// Show all resources
-const index = (req, res) => {
-  // Respond with an array and 2xx status code
-  res.status(200).json([`Galaxy#index`])
+const {Galaxy} = require('../models');
+
+// show all
+const index = async (req, res) => {
+  try{
+    const galaxies = await Galaxy.findAll();
+    res.status(200).json(galaxies);
+  } catch (error) {
+    console.error("Error fetching galaxies:", error);
+    res.status(500).json({error: "Failed to retrieve galaxies."});
+  }
 }
 
-// Show resource
-const show = (req, res) => {
-  // Respond with a single object and 2xx code
+// show resource
+const show = (req,res) => {
   res.status(200).json(`Galaxy#show(:id)`)
 }
 
-// Create a new resource
-const create = (req, res) => {
-  // Issue a redirect with a success 2xx code
-  res.redirect(`/galaxies`, 201)
+// create new resource
+const create = async (req, res) => {
+  try{
+    const galaxyData = req.body;
+    const newGalaxy = await Galaxy.create(galaxyData);
+    res.status(201).json(newGalaxy);
+  } catch (error) {
+    console.error("Error creating galaxy:", error);
+    res.status(500).json({error: "Failed to create the galaxy."});
+  }
 }
 
-// Update an existing resource
-const update = (req, res) => {
-  // Respond with a single resource and 2xx code
-  res.status(200).json(`/galaxies/${req.params.id}`, )
+// update existing resource
+const update = async (req,res) => {
+  try{
+    const galaxyId = req.params.id;
+    const updatedData = req.body;
+
+    const galaxy = await Galaxy.findByPk(galaxyId);
+
+    if(!galaxy) {
+      return res.status(404).json({error: "Galaxy not found."})
+    }
+
+    await galaxy.update(updatedData);
+
+    res.status(200).json(galaxy);
+  } catch (error) {
+   console.error("Error updating galaxy:", error);
+   res.status(500).json({error: "Failed to update the galaxy."});
+  }
 }
 
-// Remove a single resource
-const remove = (req, res) => {
-  // Respond with a 2xx status code and bool
-  res.status(204).json(true)
+// remove a resource
+const remove = async (req, res) => {
+  try{
+    const galaxyId = req.params.id;
+    const galaxy = await Galaxy.findByPk(galaxyId);
+
+    if(!galaxy){
+      return res.status(404).json({error: "Galaxy not found"});
+    }
+
+    await galaxy.destroy();
+
+    res.status(204).send();
+  } catch (error) { 
+    console.error("Error deleting galaxy:", error);
+    res.status(500).json({error: "Failed to delete the galaxy."})
+  }
 }
 
-// Export all controller actions
-module.exports = { index, show, create, update, remove }
+module.exports = {index, show, create, update, remove}
