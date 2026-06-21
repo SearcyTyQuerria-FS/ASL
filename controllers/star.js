@@ -3,7 +3,7 @@ const { Star } = require("../models");
 // Show all resources
 const index = async (req, res) => {
   try {
-    const stars = await star.findAll();
+    const stars = await Star.findAll();
     res.status(200).json(stars);
   } catch (error) {
     console.error("Error fetching stars:", error);
