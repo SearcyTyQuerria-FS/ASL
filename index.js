@@ -7,11 +7,17 @@ const app = express();
 // Load in our RESTful routers
 const routers = require("./routers/index.js");
 
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+// Set up TwigJS as view engine
+app.set("view engine", "twig");
+app.set("views", "./views");
 
 // Home page welcome middleware
 app.get("/", (req, res) => {
-  res.status(200).send("Welcome to Star Tracker Library");
+  res.status(200).render("index");
 });
 
 // Register our RESTful routers with our "app"
@@ -19,5 +25,5 @@ app.use(`/planets`, routers.planet);
 app.use(`/stars`, routers.star);
 app.use(`/galaxies`, routers.galaxy);
 
-// Set our app to listen on port 3000
+// I moved the port because I have something running on 3000
 app.listen(3000);

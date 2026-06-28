@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planets</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Planets</h1>
+      <nav>
+        <a href="/">Back to Home</a>
+      </nav>
+    </header>
+
+    <section class="form-section">
+      <h2>Add New Planet</h2>
+      <form id="planetsForm" enctype="multipart/form-data">
+        <input type="text" id="name" name="Name" placeholder="Planet Name" required>
+        <input type="file" id="image" name="image" accept="image/*">
+        <button type="submit">Add Planet</button>
+      </form>
+    </section>
+
+    <section class="resources-section">
+      <h2>All Planets</h2>
+      <div id="planetsList" class="resources-grid">
+        {% for planet in planets %}
+          <article class="resource-card">
+            {% if planet.image %}
+              <img src="/uploads/planets/{{ planet.image }}" alt="{{ planet.Name }}">
+            {% else %}
+              <div class="no-image">No Image</div>
+            {% endif %}
+            <h3>{{ planet.Name }}</h3>
+            <p>ID: {{ planet.id }}</p>
+            <footer class="actions">
+              <button class="edit-btn" data-id="{{ planet.id }}">Edit</button>
+              <button class="delete-btn" data-id="{{ planet.id }}">Delete</button>
+            </footer>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <script src="/resources.js"></script>
+</body>
+</html>

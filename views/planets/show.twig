@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ planet.name }}</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>{{ planet.Name }}</h1>
+    <a href="/planets">Back to Planets</a>
+
+    <div class="resource-detail">
+      {% if planet.image %}
+        <img src="/uploads/planets/{{ planet.image }}" alt="{{ planet.Name }}">
+      {% else %}
+        <div class="no-image">No Image</div>
+      {% endif %}
+      <p>ID: {{ planet.id }}</p>
+      <p>Created At: {{ planet.createdAt }}</p>
+      <p>Updated At: {{ planet.updatedAt }}</p>
+    </div>
+  </div>
+</body>
+</html>

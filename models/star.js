@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   Star.init({
     Name: DataTypes.STRING,
     Size: DataTypes.INTEGER,
-    Description: DataTypes.TEXT
+    Description: DataTypes.TEXT,
+    image: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Star',

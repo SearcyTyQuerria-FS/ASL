@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ galaxy.name }}</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>{{ galaxy.Name }}</h1>
+    <a href="/galaxies">Back to Galaxies</a>
+
+    <div class="resource-detail">
+      {% if galaxy.image %}
+        <img src="/uploads/galaxies/{{ galaxy.image }}" alt="{{ galaxy.Name }}">
+      {% else %}
+        <div class="no-image">No Image</div>
+      {% endif %}
+      <p>ID: {{ galaxy.id }}</p>
+      <p>Created At: {{ galaxy.createdAt }}</p>
+      <p>Updated At: {{ galaxy.updatedAt }}</p>
+    </div>
+  </div>
+</body>
+</html>

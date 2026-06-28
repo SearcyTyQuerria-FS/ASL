@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stars</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Stars</h1>
+      <nav>
+        <a href="/">Back to Home</a>
+      </nav>
+    </header>
+
+    <section class="form-section">
+      <h2>Add New Star</h2>
+      <form id="starsForm" enctype="multipart/form-data">
+        <input type="text" id="name" name="Name" placeholder="Star Name" required>
+        <input type="file" id="image" name="image" accept="image/*">
+        <button type="submit">Add Star</button>
+      </form>
+    </section>
+
+    <section class="resources-section">
+      <h2>All Stars</h2>
+      <div id="starsList" class="resources-grid">
+        {% for star in stars %}
+          <article class="resource-card">
+            {% if star.image %}
+              <img src="/uploads/stars/{{ star.image }}" alt="{{ star.Name }}">
+            {% else %}
+              <div class="no-image">No Image</div>
+            {% endif %}
+            <h3>{{ star.Name }}</h3>
+            <p>ID: {{ star.id }}</p>
+            <footer class="actions">
+              <button class="edit-btn" data-id="{{ star.id }}">Edit</button>
+              <button class="delete-btn" data-id="{{ star.id }}">Delete</button>
+            </footer>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+
+  <script src="/resources.js"></script>
+</body>
+</html>

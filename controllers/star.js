@@ -4,7 +4,13 @@ const { Star } = require("../models");
 const index = async (req, res) => {
   try {
     const stars = await Star.findAll();
-    res.status(200).json(stars);
+    const contentType = req.headers['content-type'];
+    
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(stars);
+    } else {
+      res.status(200).render('stars/index', { stars });
+    }
   } catch (error) {
     console.error("Error fetching stars:", error);
     res.status(500).json({ error: "Failed to retrieve stars." });
@@ -18,10 +24,20 @@ const show = async (req, res) => {
     const star = await Star.findByPk(starId);
 
     if (!star) {
-      return res.status(404).json({ error: "Star not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Star not found." });
+      } else {
+        return res.status(404).send('Star not found.');
+      }
     }
 
-    res.status(200).json(star);
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(star);
+    } else {
+      res.status(200).render('stars/show', { star });
+    }
   } catch (error) {
     console.error("Error fetching star:", error);
     res.status(500).json({ error: "Failed to retrieve star." });
@@ -32,9 +48,17 @@ const show = async (req, res) => {
 const create = async (req, res) => {
   try {
     const starData = req.body;
+    if (req.file) {
+      starData.image = req.file.filename;
+    }
     const newStar = await Star.create(starData);
 
-    res.status(201).json(newStar);
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(201).json(newStar);
+    } else {
+      res.status(201).redirect('/stars');
+    }
   } catch (error) {
     console.error("Error creating star:", error);
     res.status(500).json({ error: "Failed to create the star." });
@@ -50,11 +74,26 @@ const update = async (req, res) => {
     const star = await Star.findByPk(starId);
 
     if (!star) {
-      return res.status(404).json({ error: "Star not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Star not found." });
+      } else {
+        return res.status(404).send('Star not found.');
+      }
+    }
+
+    if (req.file) {
+      updatedData.image = req.file.filename;
     }
 
     await star.update(updatedData);
-    res.status(200).json(star);
+    
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(star);
+    } else {
+      res.status(200).redirect('/stars');
+    }
   } catch (error) {
     console.error("Error updating star:", error);
     res.status(500).json({ error: "Failed to update the star." });
@@ -68,11 +107,22 @@ const remove = async (req, res) => {
     const star = await Star.findByPk(starId);
 
     if (!star) {
-      return res.status(404).json({ error: "Star not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Star not found." });
+      } else {
+        return res.status(404).send('Star not found.');
+      }
     }
 
     await star.destroy();
-    res.status(204).send();
+    
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(204).send();
+    } else {
+      res.status(204).redirect('/stars');
+    }
   } catch (error) {
     console.error("Error deleting star:", error);
     res.status(500).json({ error: "Failed to delete the star." });

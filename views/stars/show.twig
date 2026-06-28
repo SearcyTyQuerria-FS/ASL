@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ star.name }}</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>{{ star.Name }}</h1>
+    <a href="/stars">Back to Stars</a>
+
+    <div class="resource-detail">
+      {% if star.image %}
+        <img src="/uploads/stars/{{ star.image }}" alt="{{ star.Name }}">
+      {% else %}
+        <div class="no-image">No Image</div>
+      {% endif %}
+      <p>ID: {{ star.id }}</p>
+      <p>Created At: {{ star.createdAt }}</p>
+      <p>Updated At: {{ star.updatedAt }}</p>
+    </div>
+  </div>
+</body>
+</html>

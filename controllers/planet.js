@@ -4,7 +4,13 @@ const { Planet } = require("../models");
 const index = async (req, res) => {
   try {
     const planets = await Planet.findAll();
-    res.status(200).json(planets);
+    const contentType = req.headers['content-type'];
+    
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(planets);
+    } else {
+      res.status(200).render('planets/index', { planets });
+    }
   } catch (error) {
     console.error("Error fetching planets:", error);
     res.status(500).json({ error: "Failed to retrieve planets." });
@@ -18,10 +24,20 @@ const show = async (req, res) => {
     const planet = await Planet.findByPk(planetId);
 
     if (!planet) {
-      return res.status(404).json({ error: "Planet not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Planet not found." });
+      } else {
+        return res.status(404).send('Planet not found.');
+      }
     }
 
-    res.status(200).json(planet);
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(planet);
+    } else {
+      res.status(200).render('planets/show', { planet });
+    }
   } catch (error) {
     console.error("Error fetching planet:", error);
     res.status(500).json({ error: "Failed to retrieve planet." });
@@ -32,9 +48,17 @@ const show = async (req, res) => {
 const create = async (req, res) => {
   try {
     const planetData = req.body;
+    if (req.file) {
+      planetData.image = req.file.filename;
+    }
     const newPlanet = await Planet.create(planetData);
 
-    res.status(201).json(newPlanet);
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(201).json(newPlanet);
+    } else {
+      res.status(201).redirect('/planets');
+    }
   } catch (error) {
     console.error("Error creating planet:", error);
     res.status(500).json({ error: "Failed to create the planet." });
@@ -50,11 +74,26 @@ const update = async (req, res) => {
     const planet = await Planet.findByPk(planetId);
 
     if (!planet) {
-      return res.status(404).json({ error: "Planet not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Planet not found." });
+      } else {
+        return res.status(404).send('Planet not found.');
+      }
+    }
+
+    if (req.file) {
+      updatedData.image = req.file.filename;
     }
 
     await planet.update(updatedData);
-    res.status(200).json(planet);
+    
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(200).json(planet);
+    } else {
+      res.status(200).redirect('/planets');
+    }
   } catch (error) {
     console.error("Error updating planet:", error);
     res.status(500).json({ error: "Failed to update the planet." });
@@ -68,11 +107,22 @@ const remove = async (req, res) => {
     const planet = await Planet.findByPk(planetId);
 
     if (!planet) {
-      return res.status(404).json({ error: "Planet not found." });
+      const contentType = req.headers['content-type'];
+      if (contentType?.includes('application/json')) {
+        return res.status(404).json({ error: "Planet not found." });
+      } else {
+        return res.status(404).send('Planet not found.');
+      }
     }
 
     await planet.destroy();
-    res.status(204).send();
+    
+    const contentType = req.headers['content-type'];
+    if (contentType?.includes('application/json')) {
+      res.status(204).send();
+    } else {
+      res.status(204).redirect('/planets');
+    }
   } catch (error) {
     console.error("Error deleting planet:", error);
     res.status(500).json({ error: "Failed to delete the planet." });
